@@ -85,6 +85,12 @@ jobs:
           ./godot -v --export "Windows Desktop" builds/win/win_game.exe
         if: matrix.os == 'ubuntu-latest'
 
+      - name: Create HTML binary
+        run: |
+          mkdir -p builds/html
+          ./godot -v --export "HTML5" builds/html/index.html
+        if: matrix.os == 'ubuntu-latest'
+
       - uses: actions/upload-artifact@v1
         name: Upload Linux archive
         with:
@@ -105,3 +111,12 @@ jobs:
           name: my_game_windows
           path: builds/win/
         if: matrix.os == 'ubuntu-latest'
+
+      - name: Publish to Github Pages
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master # The branch the action should deploy from.
+        BRANCH: gh-pages # The branch the action should deploy to.
+        FOLDER: builds/html # The folder the action should deploy.

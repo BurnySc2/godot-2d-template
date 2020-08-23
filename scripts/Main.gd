@@ -17,18 +17,20 @@ func _ready():
 #	new_game()
 
 func _process(delta: float):
-	if game_running:
-		$HUD.hide_message()
-		score_timer += delta
-		if score_timer > 1:
-			score_timer -= 1
-			score += 1
-			$HUD.update_score(score)
-			
-		mob_time += delta
-		if mob_time > mob_spawn_interval * pow(difficulty, score):
-			mob_time -= mob_spawn_interval * pow(difficulty, score)
-			spawn_mob()
+	if not game_running:
+		return
+		
+	$HUD.hide_message()
+	score_timer += delta
+	if score_timer > 1:
+		score_timer -= 1
+		score += 1
+		$HUD.update_score(score)
+		
+	mob_time += delta
+	if mob_time > mob_spawn_interval * pow(difficulty, score):
+		mob_time -= mob_spawn_interval * pow(difficulty, score)
+		spawn_mob()
 
 func new_game():
 	# Reset the game: remove enemies, play music, set score to 0, set player position
@@ -40,6 +42,7 @@ func new_game():
 	$HUD.update_score(score)
 	score_timer = 0
 	mob_time = 0
+	
 	# Wait start_delay seconds
 	yield(get_tree().create_timer(game_start_delay), "timeout")
 	game_running = true
