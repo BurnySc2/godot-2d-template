@@ -11,7 +11,7 @@ func _ready():
 	hide()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta: float):
 	var velocity = Vector2()  # The player's movement vector.
 	if Input.is_action_pressed("ui_right"):
 		velocity.x += 1
@@ -21,16 +21,17 @@ func _process(delta):
 		velocity.y += 1
 	if Input.is_action_pressed("ui_up"):
 		velocity.y -= 1
+		
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 		$AnimatedSprite.play()
 	else:
 		$AnimatedSprite.stop()
-		
+	
+	# Flip sprites based on movement
 	if velocity.x != 0:
 		$AnimatedSprite.animation = "walk"
 		$AnimatedSprite.flip_v = false
-		# See the note below about boolean assignment
 		$AnimatedSprite.flip_h = velocity.x < 0
 	elif velocity.y != 0:
 		$AnimatedSprite.animation = "up"
@@ -41,13 +42,14 @@ func _process(delta):
 	position.x = clamp(position.x, 0, screen_size.x)
 	position.y = clamp(position.y, 0, screen_size.y)
 
-func start(pos):
+func start(pos: Vector2):
 	position = pos
 	show()
 	$CollisionShape2D.disabled = false
 
-func _on_Player_body_entered(body):
-	hide()  # Player disappears after being hit.
+func _on_Player_body_entered(_body):
+	# Player disappears after being hit.
+	hide()  
 	emit_signal("hit")
 	# Tell godot to wait to disable the shape until it is safe to do so
 	$CollisionShape2D.set_deferred("disabled", true) 

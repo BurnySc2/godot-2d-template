@@ -11,3 +11,6 @@ lib/
 # Mono-specific ignores
 .mono/
 data_*/
+
+# Pycharm
+.idea

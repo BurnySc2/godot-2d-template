@@ -57,7 +57,6 @@ jobs:
           ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'windows-latest'
 
-#          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
       - name: Prepare building binary (Linux)
         run: |
           wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz -q

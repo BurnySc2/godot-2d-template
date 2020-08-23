@@ -8,5 +8,5 @@ func _ready():
 	$AnimatedSprite.animation = mob_types[randi() % mob_types.size()]
 
 func _on_VisibilityNotifier2D_screen_exited():
+	# When leaving screen, remove mob
 	queue_free()
-	
