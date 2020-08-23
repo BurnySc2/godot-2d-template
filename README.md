@@ -1,4 +1,4 @@
-# Essential files:
+# Essential files
 .gutconfig.json for testing
 
 export_presets.cfg for compiling
