@@ -62,7 +62,7 @@ jobs:
           wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz -q
           mkdir -p /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/
           unzip Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
-          mv templates/* /home/runner/.local/share/godot/templates/
+          mv templates/* /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/
           rm -r templates
           rm Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
         if: matrix.os == 'ubuntu-latest'
