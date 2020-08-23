@@ -16,6 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      # Reference: https://github.com/ceceppa/godot-gut-ci/blob/master/init-and-run-tests.sh#L23
       - name: Download Godot (Linux)
         run: |
           wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
@@ -49,7 +50,46 @@ jobs:
           ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
-      - name: Run Godot Tests (Windows)
+#      - name: Run Godot Tests (Windows)
+#        run: |
+#          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+#        if: matrix.os == 'windows-latest'
+
+      - name: Create Linux binary
         run: |
-          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+          mkdir -p builds/linux
+          ./goodot --export "Linux/X11" builds/linux/linux_game
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: Create macOS binary
+        run: |
+          mkdir -p builds/mac
+          ./goodot --export "Mac OSX" builds/mac/mac.z
+        if: matrix.os == 'macos-latest'
+
+      - name: Create Windows binary
+        run: |
+          mkdir -p builds/win
+          ./goodot --export "Windows Desktop" builds/win/win_game.exe
+        if: matrix.os == 'windows-latest'
+
+      - uses: actions/upload-artifact@v1
+        name: Upload archive (Linux)
+        with:
+          name: my_game_linux
+          path: builds/linux/
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v1
+        name: Upload archive (macOS)
+        with:
+          name: my_game_macOS
+          path: builds/mac/
+        if: matrix.os == 'macos-latest'
+
+      - uses: actions/upload-artifact@v1
+        name: Upload archive (Windows)
+        with:
+          name: my_game_windows
+          path: builds/win/
         if: matrix.os == 'windows-latest'
