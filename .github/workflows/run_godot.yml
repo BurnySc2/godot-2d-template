@@ -34,10 +34,10 @@ jobs:
 
       - name: Download Godot (Windows)
         run: |
-          curl https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_win64.exe.zip -O Godot_v${{ matrix.godot-version }}-stable_win64.exe.zip
-          unzip Godot_v${{ matrix.godot-version }}-stable_win64.exe.zip
-          rm Godot_v${{ matrix.godot-version }}-stable_win64.exe.zip
-          move Godot_v${{ matrix.godot-version }}-stable_win64.exe godot.exe
+          curl https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_win32.exe.zip -O Godot_v${{ matrix.godot-version }}-stable_win32.exe.zip
+          unzip Godot_v${{ matrix.godot-version }}-stable_win32.exe.zip
+          rm Godot_v${{ matrix.godot-version }}-stable_win32.exe.zip
+          move Godot_v${{ matrix.godot-version }}-stable_win32.exe godot.exe
         if: matrix.os == 'windows-latest'
 
       - name: Run Godot Tests (Linux, macOS)
@@ -51,5 +51,5 @@ jobs:
 
       - name: Run Godot Tests (Windows)
         run: |
-          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+          ./godot.exe -gexit -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'windows-latest'
