@@ -63,6 +63,10 @@ jobs:
           unzip Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
           mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
           mv templates/linux_x11_64_release /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_release
+          mv templates/windows_32_debug.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_32_debug.exe
+          mv templates/windows_32_release.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_32_release.exe
+          mv templates/windows_64_debug.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_64_debug.exe
+          mv templates/windows_64_release.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_64_release.exe
           rm -r templates
           rm Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
         if: matrix.os == 'ubuntu-latest'
@@ -73,23 +77,36 @@ jobs:
           ./godot -v --export "Linux/X11" builds/linux/linux_game
         if: matrix.os == 'ubuntu-latest'
 
+      - name: Create Windows binary
+        run: |
+          mkdir -p builds/win
+          ./godot -v --export "Windows Desktop" builds/win/win_game.exe
+        if: matrix.os == 'ubuntu-latest'
+
 #      - name: Create macOS binary
 #        run: |
 #          mkdir -p builds/mac
 #          ./godot --export "Mac OSX" builds/mac/mac.z
 #        if: matrix.os == 'macos-latest'
 
-      - name: Create Windows binary
-        run: |
-          mkdir -p builds/win
-          ./godot.exe -v --export "Windows Desktop" builds/win/win_game.exe --path .
-        if: matrix.os == 'windows-latest'
+#      - name: Create Windows binary
+#        run: |
+#          mkdir -p builds/win
+#          ./godot.exe -v --export "Windows Desktop" builds/win/win_game.exe --path .
+#        if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v1
         name: Upload archive (Linux)
         with:
           name: my_game_linux
           path: builds/linux/
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v1
+        name: Upload archive (Linux)
+        with:
+          name: my_game_windows
+          path: builds/win/
         if: matrix.os == 'ubuntu-latest'
 
 #      - uses: actions/upload-artifact@v1
@@ -99,9 +116,9 @@ jobs:
 #          path: builds/mac/
 #        if: matrix.os == 'macos-latest'
 
-      - uses: actions/upload-artifact@v1
-        name: Upload archive (Windows)
-        with:
-          name: my_game_windows
-          path: builds/win/
-        if: matrix.os == 'windows-latest'
+#      - uses: actions/upload-artifact@v1
+#        name: Upload archive (Windows)
+#        with:
+#          name: my_game_windows
+#          path: builds/win/
+#        if: matrix.os == 'windows-latest'
