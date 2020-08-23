@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
 #        os: [windows-latest, ubuntu-latest, macos-latest]
         python-version: [3.7]
         godot-version: [3.2.2]
@@ -52,10 +52,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
 # Doesnt seem to work properly - windows gets stuck
-#      - name: Run Godot Tests (Windows)
-#        run: |
-#          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
-#        if: matrix.os == 'windows-latest'
+      - name: Run Godot Tests (Windows)
+        run: |
+          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+        if: matrix.os == 'windows-latest'
 
 #          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
       - name: Prepare building binary (Linux)
