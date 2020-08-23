@@ -1,10 +1,11 @@
-name: RunTests
+name: Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 1
     strategy:
       fail-fast: false
       matrix:
@@ -19,6 +20,8 @@ jobs:
         run: |
           sudo apt-get install tree
           tree
+        if: matrix.os == 'ubuntu-latest'
+
 
       - name: Download Godot
         run: |
