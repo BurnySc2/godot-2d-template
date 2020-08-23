@@ -51,10 +51,11 @@ jobs:
           ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
-      - name: Run Godot Tests (Windows)
-        run: |
-          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
-        if: matrix.os == 'windows-latest'
+# Doesnt seem to work properly - windows gets stuck
+#      - name: Run Godot Tests (Windows)
+#        run: |
+#          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+#        if: matrix.os == 'windows-latest'
 
 #          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
       - name: Prepare building binary (Linux)
