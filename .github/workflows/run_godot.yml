@@ -5,11 +5,12 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 2
+    timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-latest]
+#        os: [windows-latest, ubuntu-latest, macos-latest]
         python-version: [3.7]
         godot-version: [3.2.2]
 
@@ -55,17 +56,27 @@ jobs:
 #          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
 #        if: matrix.os == 'windows-latest'
 
+      - name: Prepare building binary (Linux)
+        run: |
+          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
+          mkdir /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/
+          unzip Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
+          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
+          mv templates/linux_x11_64_release /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_release
+          rm -r templates
+          rm Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
+
       - name: Create Linux binary
         run: |
           mkdir -p builds/linux
           ./godot --export "Linux/X11" builds/linux/linux_game
         if: matrix.os == 'ubuntu-latest'
 
-      - name: Create macOS binary
-        run: |
-          mkdir -p builds/mac
-          ./godot --export "Mac OSX" builds/mac/mac.z
-        if: matrix.os == 'macos-latest'
+#      - name: Create macOS binary
+#        run: |
+#          mkdir -p builds/mac
+#          ./godot --export "Mac OSX" builds/mac/mac.z
+#        if: matrix.os == 'macos-latest'
 
       - name: Create Windows binary
         run: |
@@ -80,12 +91,12 @@ jobs:
           path: builds/linux/
         if: matrix.os == 'ubuntu-latest'
 
-      - uses: actions/upload-artifact@v1
-        name: Upload archive (macOS)
-        with:
-          name: my_game_macOS
-          path: builds/mac/
-        if: matrix.os == 'macos-latest'
+#      - uses: actions/upload-artifact@v1
+#        name: Upload archive (macOS)
+#        with:
+#          name: my_game_macOS
+#          path: builds/mac/
+#        if: matrix.os == 'macos-latest'
 
       - uses: actions/upload-artifact@v1
         name: Upload archive (Windows)
