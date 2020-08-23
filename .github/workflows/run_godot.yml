@@ -27,5 +27,5 @@ jobs:
         # The -d option tells Godot to run in debug mode which is helpful. The -s option tells Godot to run a script. --path $PWD tells Godot to treat the current directory as the root of a project.
         # When running from command line, 0 will be returned if all tests pass and 1 will be returned if any fail (pending doesn't affect the return value).
         run: |
-          ${{ matrix.godot-version }}-stable_linux_headless.64 -d -s --path $PWD addons/gut/gut_cmdln.gd
+          ./Godot_v${{ matrix.godot-version }}-stable_linux_headless.64 -d -s --path $PWD addons/gut/gut_cmdln.gd
         if: matrix.os == 'ubuntu-latest'
