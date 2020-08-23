@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 2
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +20,7 @@ jobs:
       # Reference: https://github.com/ceceppa/godot-gut-ci/blob/master/init-and-run-tests.sh#L23
       - name: Download Godot (Linux)
         run: |
-          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
+          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip -q
           unzip Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
           rm Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
           mv Godot_v${{ matrix.godot-version }}-stable_linux_headless.64 godot
@@ -28,7 +28,7 @@ jobs:
 
       - name: Download Godot (macOS)
         run: |
-          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_osx.64.zip
+          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_osx.64.zip -q
           unzip Godot_v${{ matrix.godot-version }}-stable_osx.64.zip
           rm Godot_v${{ matrix.godot-version }}-stable_osx.64.zip
           mv Godot.app/Contents/MacOS/Godot godot
@@ -58,7 +58,7 @@ jobs:
 
       - name: Prepare building binary (Linux)
         run: |
-          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
+          wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz -q
           mkdir -p /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/
           unzip Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
           mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
@@ -70,7 +70,7 @@ jobs:
       - name: Create Linux binary
         run: |
           mkdir -p builds/linux
-          ./godot --export "Linux/X11" builds/linux/linux_game
+          ./godot -v --export "Linux/X11" builds/linux/linux_game
         if: matrix.os == 'ubuntu-latest'
 
 #      - name: Create macOS binary
@@ -82,7 +82,7 @@ jobs:
       - name: Create Windows binary
         run: |
           mkdir -p builds/win
-          ./godot.exe --export "Windows Desktop" builds/win/win_game.exe
+          ./godot.exe -v --export "Windows Desktop" builds/win/win_game.exe --path .
         if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v1
