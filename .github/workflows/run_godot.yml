@@ -58,19 +58,19 @@ jobs:
       - name: Create Linux binary
         run: |
           mkdir -p builds/linux
-          ./goodot --export "Linux/X11" builds/linux/linux_game
+          ./godot --export "Linux/X11" builds/linux/linux_game
         if: matrix.os == 'ubuntu-latest'
 
       - name: Create macOS binary
         run: |
           mkdir -p builds/mac
-          ./goodot --export "Mac OSX" builds/mac/mac.z
+          ./godot --export "Mac OSX" builds/mac/mac.z
         if: matrix.os == 'macos-latest'
 
       - name: Create Windows binary
         run: |
           mkdir -p builds/win
-          ./goodot --export "Windows Desktop" builds/win/win_game.exe
+          ./godot.exe --export "Windows Desktop" builds/win/win_game.exe
         if: matrix.os == 'windows-latest'
 
       - uses: actions/upload-artifact@v1
