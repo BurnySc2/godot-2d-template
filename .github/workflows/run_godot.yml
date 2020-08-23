@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 1
+    timeout-minutes: 2
     strategy:
       fail-fast: false
       matrix:
@@ -46,10 +46,10 @@ jobs:
         # To run a single test:
         # ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd -gselect=test_example.gd
         run: |
-          ./godot -d -s -gexit --path $PWD addons/gut/gut_cmdln.gd
+          ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
       - name: Run Godot Tests (Windows)
         run: |
-          ./godot.exe -d -s -gexit --path $PWD addons/gut/gut_cmdln.gd
+          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'windows-latest'
