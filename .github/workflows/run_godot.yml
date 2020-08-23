@@ -51,5 +51,5 @@ jobs:
 
       - name: Run Godot Tests (Windows)
         run: |
-          ./godot.exe -gexit -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'windows-latest'
