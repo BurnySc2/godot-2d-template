@@ -51,22 +51,18 @@ jobs:
           ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
         if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
-#      - name: Run Godot Tests (Windows)
-#        run: |
-#          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
-#        if: matrix.os == 'windows-latest'
+      - name: Run Godot Tests (Windows)
+        run: |
+          ./godot.exe -d -s --path $PWD addons/gut/gut_cmdln.gd -gexit
+        if: matrix.os == 'windows-latest'
 
+#          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
       - name: Prepare building binary (Linux)
         run: |
           wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz -q
           mkdir -p /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/
           unzip Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
-          mv templates/linux_x11_64_debug /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_debug
-          mv templates/linux_x11_64_release /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/linux_x11_64_release
-          mv templates/windows_32_debug.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_32_debug.exe
-          mv templates/windows_32_release.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_32_release.exe
-          mv templates/windows_64_debug.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_64_debug.exe
-          mv templates/windows_64_release.exe /home/runner/.local/share/godot/templates/${{ matrix.godot-version }}.stable/windows_64_release.exe
+          mv templates/* /home/runner/.local/share/godot/templates/
           rm -r templates
           rm Godot_v${{ matrix.godot-version }}-stable_export_templates.tpz
         if: matrix.os == 'ubuntu-latest'
@@ -77,48 +73,35 @@ jobs:
           ./godot -v --export "Linux/X11" builds/linux/linux_game
         if: matrix.os == 'ubuntu-latest'
 
+      - name: Create macOS binary
+        run: |
+          mkdir -p builds/mac
+          ./godot -v --export "Mac OSX" builds/mac/mac.z
+        if: matrix.os == 'ubuntu-latest'
+
       - name: Create Windows binary
         run: |
           mkdir -p builds/win
           ./godot -v --export "Windows Desktop" builds/win/win_game.exe
         if: matrix.os == 'ubuntu-latest'
 
-#      - name: Create macOS binary
-#        run: |
-#          mkdir -p builds/mac
-#          ./godot --export "Mac OSX" builds/mac/mac.z
-#        if: matrix.os == 'macos-latest'
-
-#      - name: Create Windows binary
-#        run: |
-#          mkdir -p builds/win
-#          ./godot.exe -v --export "Windows Desktop" builds/win/win_game.exe --path .
-#        if: matrix.os == 'windows-latest'
-
       - uses: actions/upload-artifact@v1
-        name: Upload archive (Linux)
+        name: Upload Linux archive
         with:
           name: my_game_linux
           path: builds/linux/
         if: matrix.os == 'ubuntu-latest'
 
       - uses: actions/upload-artifact@v1
-        name: Upload archive (Linux)
+        name: Upload macOS archive
+        with:
+          name: my_game_macOS
+          path: builds/mac/
+        if: matrix.os == 'ubuntu-latest'
+
+      - uses: actions/upload-artifact@v1
+        name: Upload Windows archive
         with:
           name: my_game_windows
           path: builds/win/
         if: matrix.os == 'ubuntu-latest'
-
-#      - uses: actions/upload-artifact@v1
-#        name: Upload archive (macOS)
-#        with:
-#          name: my_game_macOS
-#          path: builds/mac/
-#        if: matrix.os == 'macos-latest'
-
-#      - uses: actions/upload-artifact@v1
-#        name: Upload archive (Windows)
-#        with:
-#          name: my_game_windows
-#          path: builds/win/
-#        if: matrix.os == 'windows-latest'
