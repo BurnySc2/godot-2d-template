@@ -27,6 +27,8 @@ jobs:
         run: |
           wget https://downloads.tuxfamily.org/godotengine/${{ matrix.godot-version }}/Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
           unzip Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
+          rm Godot_v${{ matrix.godot-version }}-stable_linux_headless.64.zip
+          mv Godot_v${{ matrix.godot-version }}-stable_linux_headless.64 godot
         if: matrix.os == 'ubuntu-latest'
 #          https://downloads.tuxfamily.org/godotengine/3.2.2/Godot_v3.2.2-stable_win64.exe.zip
 #          https://downloads.tuxfamily.org/godotengine/3.2.2/Godot_v3.2.2-stable_osx.64.zip
@@ -34,7 +36,9 @@ jobs:
       - name: Run Godot Tests
         # The -d option tells Godot to run in debug mode which is helpful. The -s option tells Godot to run a script. --path $PWD tells Godot to treat the current directory as the root of a project.
         # When running from command line, 0 will be returned if all tests pass and 1 will be returned if any fail (pending doesn't affect the return value).
+        # To run a single test:
+        # ./Godot_v${{ matrix.godot-version }}-stable_linux_headless.64 -d -s --path $PWD addons/gut/gut_cmdln.gd -gselect=test_example.gd
         run: |
           tree
-          ./Godot_v${{ matrix.godot-version }}-stable_linux_headless.64 -d -s --path $PWD addons/gut/gut_cmdln.gd
+          ./godot -d -s --path $PWD addons/gut/gut_cmdln.gd
         if: matrix.os == 'ubuntu-latest'
